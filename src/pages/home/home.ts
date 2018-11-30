@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
+import { RegistroPage } from '../registro/registro';
 
 @Component({
   selector: 'page-home',
@@ -7,8 +8,33 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  registro = RegistroPage;
+  mail = '';
+  password = '';
+  users = [];
+  user = "";
 
+
+  constructor(public navCtrl: NavController, 
+    public alertCtrl:AlertController, 
+    public storage: Storage) {
+
+      this.storage.keys()
+      .then(keys=>{
+        if(keys.some(key => key == 'users')){
+          this.storage.get('users')
+          .then(users =>{
+            this.users = JSON.parse("usuarios");
+          })
+        }
+
+      });
+
+  }
+
+  clickRegistrar()
+  {
+    this.navCtrl.push(this.registro, {users: this.users});
   }
 
 }
